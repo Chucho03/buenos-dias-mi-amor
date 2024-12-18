@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buenos Días, Hermosa</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0f7fa;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .garden {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/garden.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .flower {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background-image: url('img/flower.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .flower:hover {
+            transform: scale(1.1);
+        }
+        .bee {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-image: url('img/bee.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+        }
+        .message {
+            position: absolute;
+            bottom: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #d32f2f;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            opacity: 0;
+        }
+        .heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('img/heart.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="garden">
+        <div class="flower" onclick="startAnimation()"></div>
+        <div class="bee" id="bee"></div>
+        <div class="message" id="message"></div>
+    </div>
+
+<script>
+    function startAnimation() {
+        const bee = document.getElementById('bee');
+        const message = document.getElementById('message');
+        const garden = document.querySelector('.garden');
+        const text = 'Buenos días, hermosa, me encantas 💖';
+        let index = 0;
+
+        bee.style.opacity = '1';
+
+        // Posiciones para mover la abeja
+        let positions = [
+            { x: 45, y: 60 },
+            { x: 55, y: 50 },
+            { x: 65, y: 60 },
+            { x: 55, y: 70 },
+            { x: 45, y: 60 }
+        ];
+        let currentPosition = 0;
+
+        // Función para mover la abeja
+        function moveBee() {
+            if (currentPosition < positions.length) {
+                bee.style.left = positions[currentPosition].x + '%';
+                bee.style.bottom = positions[currentPosition].y + '%';
+                currentPosition++;
+                setTimeout(moveBee, 1000); // Siguiente movimiento después de 1s
+            } else {
+                showHearts(); // Lluvia de corazones al final del recorrido
+            }
+        }
+
+        // Función para mostrar el texto letra por letra
+        function revealText() {
+            if (index < text.length) {
+                message.style.opacity = '1';
+                message.textContent += text[index];
+                index++;
+                setTimeout(revealText, 100); // Velocidad de escritura: 100ms por letra
+            }
+        }
+
+        // Función para mostrar corazones
+        function showHearts() {
+            for (let i = 0; i < 10; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 2 + 2 + 's';
+                garden.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }
+        }
+
+        // Ejecutar animaciones
+        moveBee();
+        revealText(); // Ahora la escritura del texto es independiente
+    }
+</script>
+</body>
+</html>
